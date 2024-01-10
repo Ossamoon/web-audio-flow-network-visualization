@@ -5,6 +5,9 @@ import { ThemeProvider } from "./shadcn/components/theme-provider";
 import { ModeToggle } from "./shadcn/components/mode-toggle";
 import { useStore, type Store } from "./store";
 import OscillatorNode from "./nodes/OscillatorNode";
+import GainNode from "./nodes/GainNode";
+
+import "./reactflow.css";
 
 const selector = (store: Store) => ({
   nodes: store.nodes,
@@ -16,6 +19,7 @@ const selector = (store: Store) => ({
 
 const nodeTypes = {
   oscillatorNode: OscillatorNode,
+  gainNode: GainNode,
 };
 
 export default function App() {

@@ -1,4 +1,4 @@
-import { Handle, Position } from "reactflow";
+import { Position } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 import { Slider } from "@/shadcn/app/ui/slider";
 import {
@@ -8,10 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcn/app/ui/select";
-import { Label } from "@/shadcn/app/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 
 import { useStore, type Store } from "../store";
+import Handle from "../components/Handle";
 
 type WaveType = "sine" | "triangle" | "sawtooth" | "square";
 type OscillatorNodeData = {
@@ -38,34 +38,39 @@ export default function OscillatorNode({
       <CardHeader>
         <CardTitle>Oscillator Node</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        <Label>
-          <div>Frequency</div>
-          <div className="mt-2 flex items-center gap-2">
+      <CardContent className="flex flex-col gap-3">
+        <div>
+          <div className="mb-2">Frequency (Hz)</div>
+          <div className="flex items-center gap-2">
             <Slider
-              className="nodrag"
-              min={10}
-              max={1000}
-              value={[data.frequency]}
-              onValueChange={(v) => setFrequency(Number(v.at(0)))}
+              className="nodrag w-48"
+              name={"the slider"}
+              step={0.001}
+              min={Math.log10(20)}
+              max={Math.log10(20000)}
+              value={[Math.log10(data.frequency)]}
+              onValueChange={([v]) => setFrequency(10 ** v)}
             />
-            <div>{data.frequency}Hz</div>
+            <div className="w-10 font-mono">{Math.round(data.frequency)}</div>
           </div>
-        </Label>
-        <Select
-          value={data.type}
-          onValueChange={(v) => setType(v as OscillatorType)}
-        >
-          <SelectTrigger className="nodrag w-[180px]">
-            <SelectValue placeholder="Waveform" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="sine">sine</SelectItem>
-            <SelectItem value="triangle">triangle</SelectItem>
-            <SelectItem value="sawtooth">sawtooth</SelectItem>
-            <SelectItem value="square">square</SelectItem>
-          </SelectContent>
-        </Select>
+        </div>
+        <div>
+          <div className="mb-2">WaveType</div>
+          <Select
+            value={data.type}
+            onValueChange={(v) => setType(v as OscillatorType)}
+          >
+            <SelectTrigger className="nodrag w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="sine">sine</SelectItem>
+              <SelectItem value="triangle">triangle</SelectItem>
+              <SelectItem value="sawtooth">sawtooth</SelectItem>
+              <SelectItem value="square">square</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardContent>
 
       <Handle type="source" position={Position.Bottom} />

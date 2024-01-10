@@ -24,11 +24,16 @@ export const useStore = create<Store>((set, get) => ({
     {
       type: "oscillatorNode",
       id: "a",
-      data: { frequency: 220, type: "square" },
-      position: { x: 0, y: 0 },
+      data: { frequency: 440, type: "square" },
+      position: { x: 50, y: 50 },
     },
-    { id: "b", data: { label: "gain" }, position: { x: 50, y: 50 } },
-    { id: "c", data: { label: "output" }, position: { x: -50, y: 100 } },
+    {
+      type: "gainNode",
+      id: "b",
+      data: { gain: 0.5 },
+      position: { x: 150, y: 350 },
+    },
+    { id: "c", data: { label: "output" }, position: { x: 250, y: 550 } },
   ],
   edges: [],
 
