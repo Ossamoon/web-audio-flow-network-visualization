@@ -13,6 +13,7 @@ import { create } from "zustand";
 export type Store = {
   nodes: Node[];
   edges: Edge[];
+  updateNode: (id: string, data: object) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   addEdge: (data: Connection) => void;
@@ -20,11 +21,24 @@ export type Store = {
 
 export const useStore = create<Store>((set, get) => ({
   nodes: [
-    { id: "a", data: { label: "oscillator" }, position: { x: 0, y: 0 } },
+    {
+      type: "oscillatorNode",
+      id: "a",
+      data: { frequency: 220, type: "square" },
+      position: { x: 0, y: 0 },
+    },
     { id: "b", data: { label: "gain" }, position: { x: 50, y: 50 } },
     { id: "c", data: { label: "output" }, position: { x: -50, y: 100 } },
   ],
   edges: [],
+
+  updateNode(id, data) {
+    set({
+      nodes: get().nodes.map((node) =>
+        node.id === id ? { ...node, data: { ...node.data, ...data } } : node
+      ),
+    });
+  },
 
   onNodesChange(changes) {
     set({

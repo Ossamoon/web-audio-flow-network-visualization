@@ -7,10 +7,8 @@ import "reactflow/dist/style.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <ReactFlowProvider>
-        <App />
-      </ReactFlowProvider>
-    </div>
+    <ReactFlowProvider>
+      <App />
+    </ReactFlowProvider>
   </React.StrictMode>
 );
