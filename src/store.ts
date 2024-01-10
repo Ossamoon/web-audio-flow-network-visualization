@@ -13,6 +13,8 @@ import { create } from "zustand";
 export type Store = {
   nodes: Node[];
   edges: Edge[];
+  isRunning: boolean;
+  toggleAudio: () => void;
   updateNode: (id: string, data: object) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
@@ -33,9 +35,19 @@ export const useStore = create<Store>((set, get) => ({
       data: { gain: 0.5 },
       position: { x: 150, y: 350 },
     },
-    { id: "c", data: { label: "output" }, position: { x: 250, y: 550 } },
+    {
+      type: "audioDestinationNode",
+      id: "destination",
+      data: {},
+      position: { x: 250, y: 550 },
+    },
   ],
   edges: [],
+  isRunning: false,
+
+  toggleAudio() {
+    set({ isRunning: !get().isRunning });
+  },
 
   updateNode(id, data) {
     set({

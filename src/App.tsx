@@ -6,6 +6,7 @@ import { ModeToggle } from "./shadcn/components/mode-toggle";
 import { useStore, type Store } from "./store";
 import OscillatorNode from "./nodes/OscillatorNode";
 import GainNode from "./nodes/GainNode";
+import AudioDestinationNode from "./nodes/AudioDestinationNode";
 
 import "./reactflow.css";
 
@@ -20,6 +21,7 @@ const selector = (store: Store) => ({
 const nodeTypes = {
   oscillatorNode: OscillatorNode,
   gainNode: GainNode,
+  audioDestinationNode: AudioDestinationNode,
 };
 
 export default function App() {
