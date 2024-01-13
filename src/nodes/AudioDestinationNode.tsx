@@ -12,7 +12,7 @@ const selector = (store: Store) => ({
   toggleAudio: store.toggleAudio,
 });
 
-export default function AudioDestinationNode() {
+export function AudioDestinationNode() {
   const { isRunning, toggleAudio } = useStore(useShallow(selector));
   return (
     <Card>

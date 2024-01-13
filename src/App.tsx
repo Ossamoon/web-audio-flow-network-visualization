@@ -4,9 +4,9 @@ import { useShallow } from "zustand/react/shallow";
 import { ThemeProvider } from "./shadcn/components/theme-provider";
 import { ModeToggle } from "./shadcn/components/mode-toggle";
 import { useStore, type Store } from "./store";
-import OscillatorNode from "./nodes/OscillatorNode";
-import GainNode from "./nodes/GainNode";
-import AudioDestinationNode from "./nodes/AudioDestinationNode";
+import { OscillatorNode } from "./nodes/OscillatorNode";
+import { GainNode } from "./nodes/GainNode";
+import { AudioDestinationNode } from "./nodes/AudioDestinationNode";
 
 import "./reactflow.css";
 
@@ -16,6 +16,8 @@ const selector = (store: Store) => ({
   onNodesChange: store.onNodesChange,
   onEdgesChange: store.onEdgesChange,
   addEdge: store.addEdge,
+  onNodesDelete: store.removeNodes,
+  onEdgesDelete: store.removeEdges,
 });
 
 const nodeTypes = {
@@ -37,6 +39,8 @@ export default function App() {
           onNodesChange={store.onNodesChange}
           onEdgesChange={store.onEdgesChange}
           onConnect={store.addEdge}
+          onNodesDelete={store.onNodesDelete}
+          onEdgesDelete={store.onEdgesDelete}
           panOnScroll
           selectionOnDrag
           panOnDrag={[1, 2]}

@@ -10,6 +10,15 @@ import {
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 
+import {
+  updateAudioNode,
+  removeAudioNode,
+  connect,
+  disconnect,
+  isRunning,
+  toggleAudio,
+} from "./audio";
+
 export type Store = {
   nodes: Node[];
   edges: Edge[];
@@ -19,6 +28,8 @@ export type Store = {
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   addEdge: (data: Connection) => void;
+  removeNodes: (nodes: Node[]) => void;
+  removeEdges: (edges: Edge[]) => void;
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -43,10 +54,12 @@ export const useStore = create<Store>((set, get) => ({
     },
   ],
   edges: [],
-  isRunning: false,
+  isRunning: isRunning(),
 
   toggleAudio() {
-    set({ isRunning: !get().isRunning });
+    toggleAudio().then(() => {
+      set({ isRunning: isRunning() });
+    });
   },
 
   updateNode(id, data) {
@@ -55,6 +68,7 @@ export const useStore = create<Store>((set, get) => ({
         node.id === id ? { ...node, data: { ...node.data, ...data } } : node
       ),
     });
+    updateAudioNode(id, data);
   },
 
   onNodesChange(changes) {
@@ -82,5 +96,18 @@ export const useStore = create<Store>((set, get) => ({
     };
 
     set({ edges: [edge, ...get().edges] });
+    connect(data.source, data.target);
+  },
+
+  removeNodes(nodes) {
+    for (const { id } of nodes) {
+      removeAudioNode(id);
+    }
+  },
+
+  removeEdges(edges) {
+    for (const { source, target } of edges) {
+      disconnect(source, target);
+    }
   },
 }));

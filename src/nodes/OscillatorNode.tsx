@@ -25,7 +25,7 @@ const selector = (id: string) => (store: Store) => ({
   setType: (type: OscillatorType) => store.updateNode(id, { type }),
 });
 
-export default function OscillatorNode({
+export function OscillatorNode({
   id,
   data,
 }: {
@@ -46,8 +46,8 @@ export default function OscillatorNode({
               className="nodrag w-48"
               name={"the slider"}
               step={0.001}
-              min={Math.log10(20)}
-              max={Math.log10(20000)}
+              min={Math.log10(80)}
+              max={Math.log10(2560)}
               value={[Math.log10(data.frequency)]}
               onValueChange={([v]) => setFrequency(10 ** v)}
             />

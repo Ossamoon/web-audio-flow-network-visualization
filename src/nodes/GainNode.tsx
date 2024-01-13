@@ -15,13 +15,7 @@ const selector = (id: string) => (store: Store) => ({
   setGain: (gain: number) => store.updateNode(id, { gain }),
 });
 
-export default function GainNode({
-  id,
-  data,
-}: {
-  id: string;
-  data: GainNodeData;
-}) {
+export function GainNode({ id, data }: { id: string; data: GainNodeData }) {
   const { setGain } = useStore(useShallow(selector(id)));
   return (
     <Card>
