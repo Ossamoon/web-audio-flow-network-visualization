@@ -1,22 +1,11 @@
-import { Position } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
 import { Slider } from "@/shadcn/app/ui/slider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 
-import { useStore, type Store } from "../store";
-import Handle from "../components/Handle";
+import { InputHandle, OutputHandle } from "../components/Handle";
+import { useGain } from "../hooks/useGain";
 
-type GainNodeData = {
-  nodeType: "gainNode";
-  gain: number;
-};
-
-const selector = (id: string) => (store: Store) => ({
-  setGain: (gain: number) => store.updateNode(id, { gain }),
-});
-
-export function GainNode({ id, data }: { id: string; data: GainNodeData }) {
-  const { setGain } = useStore(useShallow(selector(id)));
+export function GainNode({ id }: { id: string }) {
+  const { gain, control, setGain } = useGain(id);
   return (
     <Card>
       <CardHeader>
@@ -32,15 +21,17 @@ export function GainNode({ id, data }: { id: string; data: GainNodeData }) {
               step={0.01}
               min={0}
               max={1}
-              value={[data.gain]}
+              value={[gain]}
               onValueChange={([v]) => setGain(v)}
+              disabled={!control}
             />
-            <div className="w-10 font-mono">{data.gain.toFixed(2)}</div>
+            <div className="w-10 font-mono">{gain.toFixed(2)}</div>
           </div>
         </div>
       </CardContent>
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
+
+      <InputHandle index={0} />
+      <OutputHandle index={0} />
     </Card>
   );
 }

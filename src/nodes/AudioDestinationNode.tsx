@@ -1,19 +1,13 @@
-import { Position } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 import { Volume2, VolumeX } from "lucide-react";
 
-import { useStore, type Store } from "../store";
-import Handle from "../components/Handle";
+import { InputHandle } from "../components/Handle";
 import { Toggle } from "@/shadcn/app/ui/toggle";
-
-const selector = (store: Store) => ({
-  isRunning: store.isRunning,
-  toggleAudio: store.toggleAudio,
-});
+import { useAudioContextState } from "../hooks/useAudioContext";
 
 export function AudioDestinationNode() {
-  const { isRunning, toggleAudio } = useStore(useShallow(selector));
+  const { state, toggle } = useAudioContextState();
+  const isRunning = state === "running";
   return (
     <Card>
       <CardHeader>
@@ -23,7 +17,7 @@ export function AudioDestinationNode() {
         <Toggle
           variant="outline"
           pressed={isRunning}
-          onPressedChange={toggleAudio}
+          onPressedChange={() => toggle()}
         >
           {isRunning ? (
             <Volume2 className="w-8 h-8" />
@@ -35,7 +29,7 @@ export function AudioDestinationNode() {
           </span>
         </Toggle>
       </CardContent>
-      <Handle type="target" position={Position.Top} />
+      <InputHandle index={0} />
     </Card>
   );
 }

@@ -1,5 +1,3 @@
-import { Position } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
 import { Slider } from "@/shadcn/app/ui/slider";
 import {
   Select,
@@ -10,29 +8,15 @@ import {
 } from "@/shadcn/app/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 
-import { useStore, type Store } from "../store";
-import Handle from "../components/Handle";
+import { OutputHandle, ParamHandle } from "../components/Handle";
+import {
+  useOsciillatorFrequency,
+  useOsciillatorType,
+} from "@/hooks/useOcillator";
 
-type WaveType = "sine" | "triangle" | "sawtooth" | "square";
-type OscillatorNodeData = {
-  nodeType: "oscillatorNode";
-  frequency: number;
-  type: WaveType;
-};
-
-const selector = (id: string) => (store: Store) => ({
-  setFrequency: (frequency: number) => store.updateNode(id, { frequency }),
-  setType: (type: OscillatorType) => store.updateNode(id, { type }),
-});
-
-export function OscillatorNode({
-  id,
-  data,
-}: {
-  id: string;
-  data: OscillatorNodeData;
-}) {
-  const { setFrequency, setType } = useStore(useShallow(selector(id)));
+export function OscillatorNode({ id }: { id: string }) {
+  const { frequency, setFrequency, control } = useOsciillatorFrequency(id);
+  const [type, setType] = useOsciillatorType(id);
   return (
     <Card>
       <CardHeader>
@@ -48,16 +32,17 @@ export function OscillatorNode({
               step={0.001}
               min={Math.log10(80)}
               max={Math.log10(2560)}
-              value={[Math.log10(data.frequency)]}
+              value={[Math.log10(frequency)]}
               onValueChange={([v]) => setFrequency(10 ** v)}
+              disabled={!control}
             />
-            <div className="w-10 font-mono">{Math.round(data.frequency)}</div>
+            <div className="w-10 font-mono">{Math.round(frequency)}</div>
           </div>
         </div>
         <div>
           <div className="mb-2">WaveType</div>
           <Select
-            value={data.type}
+            value={type}
             onValueChange={(v) => setType(v as OscillatorType)}
           >
             <SelectTrigger className="nodrag w-48">
@@ -73,7 +58,8 @@ export function OscillatorNode({
         </div>
       </CardContent>
 
-      <Handle type="source" position={Position.Bottom} />
+      <ParamHandle paramName="frequency" />
+      <OutputHandle index={0} />
     </Card>
   );
 }

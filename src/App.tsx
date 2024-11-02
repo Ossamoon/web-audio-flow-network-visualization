@@ -1,46 +1,25 @@
 import ReactFlow, { Background, SelectionMode } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
 
 import { ThemeProvider } from "./shadcn/components/theme-provider";
 import { ModeToggle } from "./shadcn/components/mode-toggle";
-import { useStore, type Store } from "./store";
-import { OscillatorNode } from "./nodes/OscillatorNode";
-import { GainNode } from "./nodes/GainNode";
-import { AudioDestinationNode } from "./nodes/AudioDestinationNode";
+import { useGraph } from "./hooks/useGraph";
+import { nodeTypes } from "./nodeTypes";
 
 import "./reactflow.css";
 
-const selector = (store: Store) => ({
-  nodes: store.nodes,
-  edges: store.edges,
-  onNodesChange: store.onNodesChange,
-  onEdgesChange: store.onEdgesChange,
-  addEdge: store.addEdge,
-  onNodesDelete: store.removeNodes,
-  onEdgesDelete: store.removeEdges,
-});
-
-const nodeTypes = {
-  oscillatorNode: OscillatorNode,
-  gainNode: GainNode,
-  audioDestinationNode: AudioDestinationNode,
-};
-
 export default function App() {
-  const store = useStore(useShallow(selector));
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraph();
 
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <div className="w-screen h-screen bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100">
         <ReactFlow
           nodeTypes={nodeTypes}
-          nodes={store.nodes}
-          edges={store.edges}
-          onNodesChange={store.onNodesChange}
-          onEdgesChange={store.onEdgesChange}
-          onConnect={store.addEdge}
-          onNodesDelete={store.onNodesDelete}
-          onEdgesDelete={store.onEdgesDelete}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
           panOnScroll
           selectionOnDrag
           panOnDrag={[1, 2]}

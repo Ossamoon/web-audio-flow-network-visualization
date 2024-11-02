@@ -1,7 +1,34 @@
-import { Handle as BaseHandle, type HandleProps } from "reactflow";
+import { Handle, Position } from "reactflow";
 
-export default function CustomHandle(props: HandleProps) {
+export function InputHandle({ index }: { index: number }) {
   return (
-    <BaseHandle {...props} className="w-4 h-4 rounded-full bg-stone-400" />
+    <Handle
+      type="target"
+      position={Position.Left}
+      id={`input-${index}`}
+      className="w-4 h-4 rounded-full bg-pink-400"
+    />
+  );
+}
+
+export function OutputHandle({ index }: { index: number }) {
+  return (
+    <Handle
+      type="source"
+      position={Position.Right}
+      id={`output-${index}`}
+      className="w-4 h-4 rounded-full bg-blue-400"
+    />
+  );
+}
+
+export function ParamHandle({ paramName }: { paramName: string }) {
+  return (
+    <Handle
+      type="target"
+      position={Position.Left}
+      id={paramName}
+      className="w-4 h-4 rounded-full bg-slate-400"
+    />
   );
 }
