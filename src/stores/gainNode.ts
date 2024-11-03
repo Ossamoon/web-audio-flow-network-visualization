@@ -1,4 +1,3 @@
-import type { EdgeChange } from "reactflow";
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
 import { graphNodeStore, graphEdgeStore } from "./graph";
@@ -38,15 +37,11 @@ function emitGainChange(id: string) {
   }
 }
 
-export function onChangeGainConnection(
-  changeType: EdgeChange["type"],
-  targetId: string,
-  targetHandle: string | null | undefined
-) {
-  if (changeType === "add" || changeType === "remove") {
-    if (targetHandle === "gain") {
-      emitGainControlChange(targetId);
-    }
+export function emitGainParamsControlChange(nodeId: string, paramName: string) {
+  switch (paramName) {
+    case "gain":
+      emitGainControlChange(nodeId);
+      break;
   }
 }
 

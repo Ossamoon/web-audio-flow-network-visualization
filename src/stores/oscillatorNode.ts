@@ -1,4 +1,3 @@
-import type { EdgeChange } from "reactflow";
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
 import { graphNodeStore, graphEdgeStore } from "./graph";
@@ -47,15 +46,14 @@ function emitTypeChange(id: string) {
   }
 }
 
-export function onChangeOscillatorConnection(
-  changeType: EdgeChange["type"],
-  targetId: string,
-  targetHandle: string | null | undefined
+export function emitOscillatorParamsControlChange(
+  nodeId: string,
+  paramName: string
 ) {
-  if (changeType === "add" || changeType === "remove") {
-    if (targetHandle === "frequency") {
-      emitFrequencyControlChange(targetId);
-    }
+  switch (paramName) {
+    case "frequency":
+      emitFrequencyControlChange(nodeId);
+      break;
   }
 }
 

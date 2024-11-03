@@ -1,4 +1,5 @@
 import { Slider } from "@/shadcn/app/ui/slider";
+import { Label } from "@/shadcn/app/ui/label";
 import {
   Select,
   SelectContent,
@@ -12,7 +13,7 @@ import { OutputHandle, ParamHandle } from "../components/Handle";
 import {
   useOsciillatorFrequency,
   useOsciillatorType,
-} from "@/hooks/useOcillator";
+} from "../hooks/useOcillator";
 
 export function OscillatorNode({ id }: { id: string }) {
   const { frequency, setFrequency, control } = useOsciillatorFrequency(id);
@@ -23,12 +24,13 @@ export function OscillatorNode({ id }: { id: string }) {
         <CardTitle>Oscillator Node</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <div>
-          <div className="mb-2">Frequency (Hz)</div>
+        <div className="relative">
+          <Label htmlFor="frequency">Frequency (Hz)</Label>
           <div className="flex items-center gap-2">
             <Slider
               className="nodrag w-48"
-              name={"the slider"}
+              id="frequency"
+              name="frequency"
               step={0.001}
               min={Math.log10(80)}
               max={Math.log10(2560)}
@@ -38,10 +40,12 @@ export function OscillatorNode({ id }: { id: string }) {
             />
             <div className="w-10 font-mono">{Math.round(frequency)}</div>
           </div>
+          <ParamHandle paramName="frequency" />
         </div>
         <div>
-          <div className="mb-2">WaveType</div>
+          <Label htmlFor="wavetype">WaveType</Label>
           <Select
+            name="wavetype"
             value={type}
             onValueChange={(v) => setType(v as OscillatorType)}
           >
@@ -58,7 +62,6 @@ export function OscillatorNode({ id }: { id: string }) {
         </div>
       </CardContent>
 
-      <ParamHandle paramName="frequency" />
       <OutputHandle index={0} />
     </Card>
   );

@@ -22,7 +22,6 @@ function subscribeState(listener: () => void) {
 }
 
 async function resume() {
-  console.log("resume");
   return context.resume().then(() => emitStateChange());
 }
 

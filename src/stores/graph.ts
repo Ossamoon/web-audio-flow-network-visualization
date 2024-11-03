@@ -2,8 +2,8 @@ import type { Node, Edge, NodeChange, EdgeChange, Connection } from "reactflow";
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
 
 import { NodeType } from "../nodeTypes";
-import { onChangeOscillatorConnection } from "./oscillatorNode";
-import { onChangeGainConnection } from "./gainNode";
+import { emitOscillatorParamsControlChange } from "./oscillatorNode";
+import { emitGainParamsControlChange } from "./gainNode";
 import { audioNodeStore } from "./audioNode";
 
 const initialNodes: Node<null, NodeType>[] = [
@@ -16,13 +16,13 @@ const initialNodes: Node<null, NodeType>[] = [
   {
     id: "INIT_GAIN",
     type: "GainNode",
-    position: { x: 400, y: 230 },
+    position: { x: 400, y: 200 },
     data: null,
   },
   {
     id: "INIT_DESTINATION",
     type: "AudioDestinationNode",
-    position: { x: 760, y: 250 },
+    position: { x: 760, y: 200 },
     data: null,
   },
 ];
@@ -94,9 +94,6 @@ function removeNode(id: string) {
 }
 
 function onNodesChange(changes: NodeChange[]) {
-  for (const change of changes) {
-    console.log(change);
-  }
   nodes = applyNodeChanges(changes, nodes) as Node<null, NodeType>[];
   emitNodesChange();
 }
@@ -116,63 +113,48 @@ function subscribeEdges(listener: () => void) {
   };
 }
 
-function onConnect(connection: Connection) {
-  const { source, target } = convertEdge(connection);
-  audioNodeStore.connect(source, target);
-  switch (getNode(connection.target!)?.type) {
+function emitAudioParamsControlChange(nodeId: string, paramName: string) {
+  const nodeType = getNode(nodeId)?.type;
+  switch (nodeType) {
     case "OscillatorNode":
-      onChangeOscillatorConnection(
-        "add",
-        connection.target!,
-        connection.targetHandle
-      );
+      emitOscillatorParamsControlChange(nodeId, paramName);
       break;
     case "GainNode":
-      onChangeGainConnection(
-        "add",
-        connection.target!,
-        connection.targetHandle
-      );
+      emitGainParamsControlChange(nodeId, paramName);
       break;
   }
+}
 
+function onConnect(connection: Connection) {
   edges = addEdge(connection, edges);
   emitEdgesChange();
+
+  const { source, target } = convertEdge(connection);
+  audioNodeStore.connect(source, target);
+
+  if (target.handleType === "param") {
+    emitAudioParamsControlChange(target.nodeId, target.paramName);
+  }
 }
 
 function onEdgesChange(changes: EdgeChange[]) {
+  const oldEdges = edges;
+  edges = applyEdgeChanges(changes, edges);
+  emitEdgesChange();
+
   for (const change of changes) {
-    if (change.type === "add") {
-      const connection = {
-        source: change.item.source,
-        sourceHandle: change.item.sourceHandle ?? null,
-        target: change.item.target,
-        targetHandle: change.item.targetHandle ?? null,
-      };
-      onConnect(connection);
-    }
     if (change.type === "remove") {
-      const edge = getEdge(change.id);
+      const edge = oldEdges.find((edge) => edge.id === change.id);
       if (!edge) return;
+
       const { source, target } = convertEdge(edge);
       audioNodeStore.disconnect(source, target);
-      switch (getNode(edge.target)?.type) {
-        case "OscillatorNode":
-          onChangeOscillatorConnection(
-            change.type,
-            edge.target,
-            edge.targetHandle
-          );
-          break;
-        case "GainNode":
-          onChangeGainConnection(change.type, edge.target, edge.targetHandle);
-          break;
+
+      if (target.handleType === "param") {
+        emitAudioParamsControlChange(target.nodeId, target.paramName);
       }
     }
   }
-
-  edges = applyEdgeChanges(changes, edges);
-  emitEdgesChange();
 }
 
 export const graphNodeStore = {
