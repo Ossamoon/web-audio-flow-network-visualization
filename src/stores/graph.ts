@@ -10,19 +10,19 @@ const initialNodes: Node<null, NodeType>[] = [
   {
     id: "INIT_OSCILLATOR",
     type: "OscillatorNode",
-    position: { x: 50, y: 200 },
+    position: { x: 100, y: 200 },
     data: null,
   },
   {
     id: "INIT_GAIN",
     type: "GainNode",
-    position: { x: 400, y: 200 },
+    position: { x: 450, y: 200 },
     data: null,
   },
   {
     id: "INIT_DESTINATION",
     type: "AudioDestinationNode",
-    position: { x: 760, y: 200 },
+    position: { x: 800, y: 200 },
     data: null,
   },
 ];
@@ -174,7 +174,6 @@ export const graphEdgeStore = {
   onEdgesChange,
 };
 
-// util functions
 function convertEdge(edge: Edge | Connection) {
   const source = {
     nodeId: edge.source!,

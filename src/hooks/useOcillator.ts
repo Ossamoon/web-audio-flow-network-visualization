@@ -19,6 +19,22 @@ export function useOsciillatorFrequency(id: string) {
   return { frequency, setFrequency, control };
 }
 
+export function useOsciillatorDetune(id: string) {
+  const control = useSyncExternalStore(
+    (listener) =>
+      oscillatorNodeStore.subscribeOscillatorDetuneControl(id, listener),
+    () => oscillatorNodeStore.getOscillatorDetuneControl(id)
+  );
+  const detune = useSyncExternalStore(
+    (listener) => oscillatorNodeStore.subscribeOscillatorDetune(id, listener),
+    () => oscillatorNodeStore.getOscillatorDetune(id)
+  );
+  const setDetune = (value: number) =>
+    oscillatorNodeStore.setOscillatorDetune(id, value);
+
+  return { detune, setDetune, control };
+}
+
 export function useOsciillatorType(
   id: string
 ): [OscillatorType, (value: OscillatorType) => void] {

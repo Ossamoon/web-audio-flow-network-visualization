@@ -1,6 +1,7 @@
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
-import { graphNodeStore, graphEdgeStore } from "./graph";
+import { graphNodeStore } from "./graph";
+import { createStore, createParamControlStore } from "./utils";
 
 function getOscillatorNode(id: string) {
   return audioNodeStore.getNode(id) as OscillatorNode;
@@ -24,27 +25,28 @@ function removeOscillatorNode(id: string) {
   graphNodeStore.removeNode(id);
 }
 
-const oscilattorFrequencyControlListeners = new Map<string, Set<() => void>>();
-const oscilattorFrequencyListeners = new Map<string, Set<() => void>>();
-const oscilattorTypeListeners = new Map<string, Set<() => void>>();
+const {
+  emitChange: emitFrequencyControlChange,
+  get: getOscillatorFrequencyControl,
+  subscribe: subscribeOscillatorFrequencyControl,
+} = createParamControlStore("frequency");
 
-function emitFrequencyControlChange(id: string) {
-  for (const listener of oscilattorFrequencyControlListeners.get(id) ?? []) {
-    listener();
-  }
-}
+const {
+  emitChange: emitDetuneControlChange,
+  get: getOscillatorDetuneControl,
+  subscribe: subscribeOscillatorDetuneControl,
+} = createParamControlStore("detune");
 
-function emitFrequencyChange(id: string) {
-  for (const listener of oscilattorFrequencyListeners.get(id) ?? []) {
-    listener();
-  }
-}
+const {
+  emitChange: emitFrequencyChange,
+  subscribe: subscribeOscillatorFrequency,
+} = createStore();
 
-function emitTypeChange(id: string) {
-  for (const listener of oscilattorTypeListeners.get(id) ?? []) {
-    listener();
-  }
-}
+const { emitChange: emitDetuneChange, subscribe: subscribeOscillatorDetune } =
+  createStore();
+
+const { emitChange: emitTypeChange, subscribe: subscribeOscillatorType } =
+  createStore();
 
 export function emitOscillatorParamsControlChange(
   nodeId: string,
@@ -54,39 +56,14 @@ export function emitOscillatorParamsControlChange(
     case "frequency":
       emitFrequencyControlChange(nodeId);
       break;
+    case "detune":
+      emitDetuneControlChange(nodeId);
+      break;
   }
-}
-
-function getOscillatorFrequencyControl(id: string) {
-  const edges = graphEdgeStore.getEdges();
-  for (const edge of edges.values()) {
-    if (edge.target === id && edge.targetHandle === "frequency") {
-      return false;
-    }
-  }
-  return true;
-}
-
-function subscribeOscillatorFrequencyControl(id: string, listener: () => void) {
-  const listeners = oscilattorFrequencyControlListeners.get(id) ?? new Set();
-  listeners.add(listener);
-  oscilattorFrequencyControlListeners.set(id, listeners);
-  return () => {
-    listeners.delete(listener);
-  };
 }
 
 function getOscillatorFrequency(id: string) {
   return getOscillatorNode(id).frequency.value;
-}
-
-function subscribeOscillatorFrequency(id: string, listener: () => void) {
-  const listeners = oscilattorFrequencyListeners.get(id) ?? new Set();
-  listeners.add(listener);
-  oscilattorFrequencyListeners.set(id, listeners);
-  return () => {
-    listeners.delete(listener);
-  };
 }
 
 function setOscillatorFrequency(id: string, value: number) {
@@ -96,17 +73,19 @@ function setOscillatorFrequency(id: string, value: number) {
   }
 }
 
-function getOscillatorType(id: string) {
-  return getOscillatorNode(id).type;
+function getOscillatorDetune(id: string) {
+  return getOscillatorNode(id).detune.value;
 }
 
-function subscribeOscillatorType(id: string, listener: () => void) {
-  const listeners = oscilattorTypeListeners.get(id) ?? new Set();
-  listeners.add(listener);
-  oscilattorTypeListeners.set(id, listeners);
-  return () => {
-    listeners.delete(listener);
-  };
+function setOscillatorDetune(id: string, value: number) {
+  if (getOscillatorDetuneControl(id)) {
+    getOscillatorNode(id).detune.value = value;
+    emitDetuneChange(id);
+  }
+}
+
+function getOscillatorType(id: string) {
+  return getOscillatorNode(id).type;
 }
 
 function setOscillatorType(id: string, value: OscillatorType) {
@@ -120,9 +99,14 @@ export const oscillatorNodeStore = {
   removeOscillatorNode,
   getOscillatorFrequencyControl,
   subscribeOscillatorFrequencyControl,
+  getOscillatorDetuneControl,
+  subscribeOscillatorDetuneControl,
   getOscillatorFrequency,
   subscribeOscillatorFrequency,
   setOscillatorFrequency,
+  getOscillatorDetune,
+  subscribeOscillatorDetune,
+  setOscillatorDetune,
   getOscillatorType,
   subscribeOscillatorType,
   setOscillatorType,

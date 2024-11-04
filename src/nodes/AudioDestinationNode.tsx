@@ -6,30 +6,34 @@ import { Toggle } from "@/shadcn/app/ui/toggle";
 import { useAudioContextState } from "../hooks/useAudioContext";
 
 export function AudioDestinationNode() {
-  const { state, toggle } = useAudioContextState();
-  const isRunning = state === "running";
   return (
     <Card>
       <CardHeader>
         <CardTitle>Audio Destination Node</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <Toggle
-          variant="outline"
-          pressed={isRunning}
-          onPressedChange={() => toggle()}
-        >
-          {isRunning ? (
-            <Volume2 className="w-8 h-8" />
-          ) : (
-            <VolumeX className="w-8 h-8" />
-          )}
-          <span className="ml-3 text-lg">
-            {isRunning ? "Playing" : "Stopped"}
-          </span>
-        </Toggle>
+        <PlayerToggleButton />
       </CardContent>
       <InputHandle index={0} />
     </Card>
+  );
+}
+
+function PlayerToggleButton() {
+  const { state, toggle } = useAudioContextState();
+  const isRunning = state === "running";
+  return (
+    <Toggle
+      variant="outline"
+      pressed={isRunning}
+      onPressedChange={() => toggle()}
+    >
+      {isRunning ? (
+        <Volume2 className="w-8 h-8" />
+      ) : (
+        <VolumeX className="w-8 h-8" />
+      )}
+      <span className="ml-3 text-lg">{isRunning ? "Playing" : "Stopped"}</span>
+    </Toggle>
   );
 }

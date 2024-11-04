@@ -1,6 +1,7 @@
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
-import { graphNodeStore, graphEdgeStore } from "./graph";
+import { graphNodeStore } from "./graph";
+import { createStore, createParamControlStore } from "./utils";
 
 function getGainNode(id: string) {
   return audioNodeStore.getNode(id) as GainNode;
@@ -22,20 +23,13 @@ function removeGainNode(id: string) {
   graphNodeStore.removeNode(id);
 }
 
-const gainControlListeners = new Map<string, Set<() => void>>();
-const gainListeners = new Map<string, Set<() => void>>();
+const {
+  emitChange: emitGainControlChange,
+  get: getGainControl,
+  subscribe: subscribeGainControl,
+} = createParamControlStore("gain");
 
-function emitGainControlChange(id: string) {
-  for (const listener of gainControlListeners.get(id) ?? []) {
-    listener();
-  }
-}
-
-function emitGainChange(id: string) {
-  for (const listener of gainListeners.get(id) ?? []) {
-    listener();
-  }
-}
+const { emitChange: emitGainChange, subscribe: subscribeGain } = createStore();
 
 export function emitGainParamsControlChange(nodeId: string, paramName: string) {
   switch (paramName) {
@@ -45,37 +39,9 @@ export function emitGainParamsControlChange(nodeId: string, paramName: string) {
   }
 }
 
-function getGainControl(id: string) {
-  const edges = graphEdgeStore.getEdges();
-  for (const edge of edges.values()) {
-    if (edge.target === id && edge.targetHandle === "gain") {
-      return false;
-    }
-  }
-  return true;
-}
-
-function subscribeGainControl(id: string, listener: () => void) {
-  const listeners = gainControlListeners.get(id) ?? new Set();
-  listeners.add(listener);
-  gainControlListeners.set(id, listeners);
-  return () => {
-    listeners.delete(listener);
-  };
-}
-
 function getGain(id: string) {
   const node = getGainNode(id);
   return node.gain.value;
-}
-
-function subscribeGain(id: string, listener: () => void) {
-  const listeners = gainListeners.get(id) ?? new Set();
-  listeners.add(listener);
-  gainListeners.set(id, listeners);
-  return () => {
-    listeners.delete(listener);
-  };
 }
 
 function setGain(id: string, value: number) {

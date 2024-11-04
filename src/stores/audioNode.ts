@@ -2,17 +2,6 @@ import context from "./audioContext";
 
 const audioNodeMap = new Map<string, AudioNode>();
 
-// Initial Setup
-const oscillator = context.createOscillator();
-oscillator.start();
-const gain = context.createGain();
-const destination = context.destination;
-oscillator.connect(gain);
-gain.connect(destination);
-audioNodeMap.set("INIT_OSCILLATOR", oscillator);
-audioNodeMap.set("INIT_GAIN", gain);
-audioNodeMap.set("INIT_DESTINATION", destination);
-
 function getNode(id: string) {
   const node = audioNodeMap.get(id);
   if (node === undefined) {
@@ -100,3 +89,14 @@ export const audioNodeStore = {
   connect,
   disconnect,
 };
+
+// Initial Setup
+const oscillator = context.createOscillator();
+oscillator.start();
+const gain = context.createGain();
+const destination = context.destination;
+oscillator.connect(gain);
+gain.connect(destination);
+audioNodeMap.set("INIT_OSCILLATOR", oscillator);
+audioNodeMap.set("INIT_GAIN", gain);
+audioNodeMap.set("INIT_DESTINATION", destination);
