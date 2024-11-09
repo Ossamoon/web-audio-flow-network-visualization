@@ -1,7 +1,7 @@
 import ReactFlow, { Background, SelectionMode } from "reactflow";
 
-import { ThemeProvider } from "./shadcn/components/theme-provider";
-import { ModeToggle } from "./shadcn/components/mode-toggle";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeModeToggle } from "./components/ThemeModeToggle";
 import { useGraph } from "./hooks/useGraph";
 import { nodeTypes } from "./nodeTypes";
 
@@ -28,7 +28,7 @@ export default function App() {
           <Background />
         </ReactFlow>
         <div className="absolute top-2 right-2 z-10">
-          <ModeToggle />
+          <ThemeModeToggle />
         </div>
       </div>
     </ThemeProvider>
