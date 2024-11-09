@@ -1,17 +1,17 @@
 import { useSyncExternalStore } from "react";
 
-import { gainNodeStore } from "../stores/gainNode";
+import { gainStore } from "../stores/gainNode";
 
 export function useGain(id: string) {
   const control = useSyncExternalStore(
-    (listener) => gainNodeStore.subscribeGainControl(id, listener),
-    () => gainNodeStore.getGainControl(id)
+    (listener) => gainStore.subscribeGainControl(id, listener),
+    () => gainStore.getGainControl(id)
   );
   const gain = useSyncExternalStore(
-    (listener) => gainNodeStore.subscribeGain(id, listener),
-    () => gainNodeStore.getGain(id)
+    (listener) => gainStore.subscribeGain(id, listener),
+    () => gainStore.getGain(id)
   );
-  const setGain = (value: number) => gainNodeStore.setGain(id, value);
+  const setGain = (value: number) => gainStore.setGain(id, value);
 
   return { gain, setGain, control };
 }

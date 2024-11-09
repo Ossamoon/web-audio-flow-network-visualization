@@ -25,6 +25,12 @@ function removeOscillatorNode(id: string) {
   graphNodeStore.removeNode(id);
 }
 
+export const oscillatorNodeStore = {
+  getOscillatorNode,
+  createOscillatorNode,
+  removeOscillatorNode,
+};
+
 const {
   emitChange: emitFrequencyControlChange,
   get: getOscillatorFrequencyControl,
@@ -93,20 +99,23 @@ function setOscillatorType(id: string, value: OscillatorType) {
   emitTypeChange(id);
 }
 
-export const oscillatorNodeStore = {
-  getOscillatorNode,
-  createOscillatorNode,
-  removeOscillatorNode,
+export const frequencyStore = {
   getOscillatorFrequencyControl,
   subscribeOscillatorFrequencyControl,
-  getOscillatorDetuneControl,
-  subscribeOscillatorDetuneControl,
   getOscillatorFrequency,
   subscribeOscillatorFrequency,
   setOscillatorFrequency,
+};
+
+export const detuneStore = {
+  getOscillatorDetuneControl,
+  subscribeOscillatorDetuneControl,
   getOscillatorDetune,
   subscribeOscillatorDetune,
   setOscillatorDetune,
+};
+
+export const typeStore = {
   getOscillatorType,
   subscribeOscillatorType,
   setOscillatorType,

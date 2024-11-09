@@ -1,36 +1,38 @@
 import { useSyncExternalStore } from "react";
 
-import { oscillatorNodeStore } from "../stores/oscillatorNode";
+import {
+  frequencyStore,
+  detuneStore,
+  typeStore,
+} from "../stores/oscillatorNode";
 
 export function useOsciillatorFrequency(id: string) {
   const control = useSyncExternalStore(
     (listener) =>
-      oscillatorNodeStore.subscribeOscillatorFrequencyControl(id, listener),
-    () => oscillatorNodeStore.getOscillatorFrequencyControl(id)
+      frequencyStore.subscribeOscillatorFrequencyControl(id, listener),
+    () => frequencyStore.getOscillatorFrequencyControl(id)
   );
   const frequency = useSyncExternalStore(
-    (listener) =>
-      oscillatorNodeStore.subscribeOscillatorFrequency(id, listener),
-    () => oscillatorNodeStore.getOscillatorFrequency(id)
+    (listener) => frequencyStore.subscribeOscillatorFrequency(id, listener),
+    () => frequencyStore.getOscillatorFrequency(id)
   );
   const setFrequency = (value: number) =>
-    oscillatorNodeStore.setOscillatorFrequency(id, value);
+    frequencyStore.setOscillatorFrequency(id, value);
 
   return { frequency, setFrequency, control };
 }
 
 export function useOsciillatorDetune(id: string) {
   const control = useSyncExternalStore(
-    (listener) =>
-      oscillatorNodeStore.subscribeOscillatorDetuneControl(id, listener),
-    () => oscillatorNodeStore.getOscillatorDetuneControl(id)
+    (listener) => detuneStore.subscribeOscillatorDetuneControl(id, listener),
+    () => detuneStore.getOscillatorDetuneControl(id)
   );
   const detune = useSyncExternalStore(
-    (listener) => oscillatorNodeStore.subscribeOscillatorDetune(id, listener),
-    () => oscillatorNodeStore.getOscillatorDetune(id)
+    (listener) => detuneStore.subscribeOscillatorDetune(id, listener),
+    () => detuneStore.getOscillatorDetune(id)
   );
   const setDetune = (value: number) =>
-    oscillatorNodeStore.setOscillatorDetune(id, value);
+    detuneStore.setOscillatorDetune(id, value);
 
   return { detune, setDetune, control };
 }
@@ -39,11 +41,11 @@ export function useOsciillatorType(
   id: string
 ): [OscillatorType, (value: OscillatorType) => void] {
   const type = useSyncExternalStore(
-    (listener) => oscillatorNodeStore.subscribeOscillatorType(id, listener),
-    () => oscillatorNodeStore.getOscillatorType(id)
+    (listener) => typeStore.subscribeOscillatorType(id, listener),
+    () => typeStore.getOscillatorType(id)
   );
   const setType = (value: OscillatorType) =>
-    oscillatorNodeStore.setOscillatorType(id, value);
+    typeStore.setOscillatorType(id, value);
 
   return [type, setType];
 }

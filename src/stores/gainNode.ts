@@ -23,6 +23,12 @@ function removeGainNode(id: string) {
   graphNodeStore.removeNode(id);
 }
 
+export const gainNodeStore = {
+  getGainNode,
+  createGainNode,
+  removeGainNode,
+};
+
 const {
   emitChange: emitGainControlChange,
   get: getGainControl,
@@ -50,9 +56,7 @@ function setGain(id: string, value: number) {
   emitGainChange(id);
 }
 
-export const gainNodeStore = {
-  createGainNode,
-  removeGainNode,
+export const gainStore = {
   getGainControl,
   subscribeGainControl,
   getGain,
