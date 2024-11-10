@@ -19,6 +19,9 @@ export function AddNodeDropdown() {
         <DropdownMenuItem onClick={() => addNode("OscillatorNode")}>
           OscillatorNode
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => addNode("ConstantSourceNode")}>
+          ConstantSourceNode
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => addNode("GainNode")}>
           GainNode
         </DropdownMenuItem>

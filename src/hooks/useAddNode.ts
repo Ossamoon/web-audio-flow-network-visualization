@@ -2,6 +2,7 @@ import { useReactFlow } from "reactflow";
 
 import { graphNodeStore } from "../stores/graph";
 import { oscillatorNodeStore } from "../stores/oscillatorNode";
+import { constantSourceNodeStore } from "@/stores/constantSourceNode";
 import { gainNodeStore } from "../stores/gainNode";
 import type { NodeType } from "../nodeTypes";
 
@@ -9,6 +10,8 @@ const createNode = (type: NodeType) => {
   switch (type) {
     case "OscillatorNode":
       return oscillatorNodeStore.createOscillatorNode();
+    case "ConstantSourceNode":
+      return constantSourceNodeStore.createConstantSourceNode();
     case "GainNode":
       return gainNodeStore.createGainNode();
     case "AudioDestinationNode":

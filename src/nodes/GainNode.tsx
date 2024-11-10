@@ -14,7 +14,6 @@ export function GainNode({ id }: { id: string }) {
       <CardContent className="flex flex-col gap-3">
         <GainControl id={id} />
       </CardContent>
-
       <InputHandle index={0} />
       <OutputHandle index={0} />
     </Card>
