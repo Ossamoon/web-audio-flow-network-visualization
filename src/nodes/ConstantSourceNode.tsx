@@ -31,6 +31,7 @@ function OffsetControl({ id }: { id: string }) {
             id="offset"
             name="offset"
             type="number"
+            step="0.01"
             value={offset}
             onChange={(e) => setOffset(parseFloat(e.target.value))}
             disabled={!control}
