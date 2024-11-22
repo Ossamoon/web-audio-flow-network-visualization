@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 import { Input } from "@/shadcn/app/ui/input";
 import { Switch } from "@/shadcn/app/ui/switch";
 
-import { InputHandle, OutputHandle, ParamHandle } from "../components/Handle";
-import { useGain } from "../hooks/useGain";
+import { InputHandle, OutputHandle, ParamHandle } from "../Handle";
+import { useGain } from "../../hooks/useGain";
 
 export function GainNode({ id }: { id: string }) {
   const [slider, setSlider] = useState(true);

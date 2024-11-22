@@ -8,31 +8,29 @@ import {
 
 export function useOsciillatorFrequency(id: string) {
   const control = useSyncExternalStore(
-    (listener) =>
-      frequencyStore.subscribeOscillatorFrequencyControl(id, listener),
-    () => frequencyStore.getOscillatorFrequencyControl(id)
+    (listener) => frequencyStore.subscribeFrequencyControl(id, listener),
+    () => frequencyStore.getFrequencyControl(id)
   );
   const frequency = useSyncExternalStore(
-    (listener) => frequencyStore.subscribeOscillatorFrequency(id, listener),
-    () => frequencyStore.getOscillatorFrequency(id)
+    (listener) => frequencyStore.subscribeFrequency(id, listener),
+    () => frequencyStore.getFrequency(id)
   );
   const setFrequency = (value: number) =>
-    frequencyStore.setOscillatorFrequency(id, value);
+    frequencyStore.setFrequency(id, value);
 
   return { frequency, setFrequency, control };
 }
 
 export function useOsciillatorDetune(id: string) {
   const control = useSyncExternalStore(
-    (listener) => detuneStore.subscribeOscillatorDetuneControl(id, listener),
-    () => detuneStore.getOscillatorDetuneControl(id)
+    (listener) => detuneStore.subscribeDetuneControl(id, listener),
+    () => detuneStore.getDetuneControl(id)
   );
   const detune = useSyncExternalStore(
-    (listener) => detuneStore.subscribeOscillatorDetune(id, listener),
-    () => detuneStore.getOscillatorDetune(id)
+    (listener) => detuneStore.subscribeDetune(id, listener),
+    () => detuneStore.getDetune(id)
   );
-  const setDetune = (value: number) =>
-    detuneStore.setOscillatorDetune(id, value);
+  const setDetune = (value: number) => detuneStore.setDetune(id, value);
 
   return { detune, setDetune, control };
 }
@@ -41,11 +39,10 @@ export function useOsciillatorType(
   id: string
 ): [OscillatorType, (value: OscillatorType) => void] {
   const type = useSyncExternalStore(
-    (listener) => typeStore.subscribeOscillatorType(id, listener),
-    () => typeStore.getOscillatorType(id)
+    (listener) => typeStore.subscribeType(id, listener),
+    () => typeStore.getType(id)
   );
-  const setType = (value: OscillatorType) =>
-    typeStore.setOscillatorType(id, value);
+  const setType = (value: OscillatorType) => typeStore.setType(id, value);
 
   return [type, setType];
 }

@@ -1,7 +1,7 @@
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
 import { graphNodeStore } from "./graph";
-import { createParamControlStore, createStore } from "./utils";
+import { createParamStore } from "./utils";
 
 function getConstantSourceNode(id: string) {
   return audioNodeStore.getNode(id) as ConstantSourceNode;
@@ -32,36 +32,13 @@ export const constantSourceNodeStore = {
 };
 
 const {
-  emitChange: emitOffsetControlChange,
-  get: getOffsetControl,
-  subscribe: subscribeOffsetControl,
-} = createParamControlStore("offset");
-
-const { emitChange: emitOffsetChange, subscribe: subscribeOffset } =
-  createStore();
-
-export function emitConstantSourceParamsControlChange(
-  nodeId: string,
-  paramName: string
-) {
-  switch (paramName) {
-    case "offset":
-      emitOffsetControlChange(nodeId);
-      break;
-  }
-}
-
-function getOffset(id: string) {
-  const node = getConstantSourceNode(id);
-  return node.offset.value;
-}
-
-function setOffset(id: string, value: number) {
-  if (getOffsetControl(id)) {
-    getConstantSourceNode(id).offset.value = value;
-    emitOffsetChange(id);
-  }
-}
+  subscribeParamControl: subscribeOffsetControl,
+  getParamControl: getOffsetControl,
+  // setParamControl: setOffsetControl,
+  subscribeParamValue: subscribeOffset,
+  getParamValue: getOffset,
+  setParamValue: setOffset,
+} = createParamStore("offset", getConstantSourceNode);
 
 export const offsetStore = {
   getOffsetControl,

@@ -12,12 +12,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 import { Input } from "@/shadcn/app/ui/input";
 import { Switch } from "@/shadcn/app/ui/switch";
 
-import { OutputHandle, ParamHandle } from "../components/Handle";
+import { OutputHandle, ParamHandle } from "../Handle";
 import {
   useOsciillatorFrequency,
   useOsciillatorDetune,
   useOsciillatorType,
-} from "../hooks/useOcillator";
+} from "../../hooks/useOcillator";
 
 export function OscillatorNode({ id }: { id: string }) {
   const [slider, setSlider] = useState(true);

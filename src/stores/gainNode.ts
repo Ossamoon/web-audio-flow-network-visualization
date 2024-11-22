@@ -1,7 +1,7 @@
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
 import { graphNodeStore } from "./graph";
-import { createStore, createParamControlStore } from "./utils";
+import { createParamStore } from "./utils";
 
 function getGainNode(id: string) {
   return audioNodeStore.getNode(id) as GainNode;
@@ -30,31 +30,13 @@ export const gainNodeStore = {
 };
 
 const {
-  emitChange: emitGainControlChange,
-  get: getGainControl,
-  subscribe: subscribeGainControl,
-} = createParamControlStore("gain");
-
-const { emitChange: emitGainChange, subscribe: subscribeGain } = createStore();
-
-export function emitGainParamsControlChange(nodeId: string, paramName: string) {
-  switch (paramName) {
-    case "gain":
-      emitGainControlChange(nodeId);
-      break;
-  }
-}
-
-function getGain(id: string) {
-  const node = getGainNode(id);
-  return node.gain.value;
-}
-
-function setGain(id: string, value: number) {
-  const node = getGainNode(id);
-  node.gain.value = value;
-  emitGainChange(id);
-}
+  subscribeParamControl: subscribeGainControl,
+  getParamControl: getGainControl,
+  // setParamControl: setGainControl,
+  subscribeParamValue: subscribeGain,
+  getParamValue: getGain,
+  setParamValue: setGain,
+} = createParamStore("gain", getGainNode);
 
 export const gainStore = {
   getGainControl,

@@ -2,8 +2,6 @@ import type { Node, Edge, NodeChange, EdgeChange, Connection } from "reactflow";
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
 
 import { NodeType } from "../nodeTypes";
-import { emitOscillatorParamsControlChange } from "./oscillatorNode";
-import { emitGainParamsControlChange } from "./gainNode";
 import { audioNodeStore } from "./audioNode";
 
 const initialNodes: Node<null, NodeType>[] = [
@@ -113,28 +111,12 @@ function subscribeEdges(listener: () => void) {
   };
 }
 
-function emitAudioParamsControlChange(nodeId: string, paramName: string) {
-  const nodeType = getNode(nodeId)?.type;
-  switch (nodeType) {
-    case "OscillatorNode":
-      emitOscillatorParamsControlChange(nodeId, paramName);
-      break;
-    case "GainNode":
-      emitGainParamsControlChange(nodeId, paramName);
-      break;
-  }
-}
-
 function onConnect(connection: Connection) {
   edges = addEdge(connection, edges);
   emitEdgesChange();
 
   const { source, target } = convertEdge(connection);
   audioNodeStore.connect(source, target);
-
-  if (target.handleType === "param") {
-    emitAudioParamsControlChange(target.nodeId, target.paramName);
-  }
 }
 
 function onEdgesChange(changes: EdgeChange[]) {
@@ -149,10 +131,6 @@ function onEdgesChange(changes: EdgeChange[]) {
 
       const { source, target } = convertEdge(edge);
       audioNodeStore.disconnect(source, target);
-
-      if (target.handleType === "param") {
-        emitAudioParamsControlChange(target.nodeId, target.paramName);
-      }
     }
   }
 }

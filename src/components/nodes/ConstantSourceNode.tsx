@@ -2,7 +2,7 @@ import { Input } from "@/shadcn/app/ui/input";
 import { Label } from "@/shadcn/app/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 
-import { OutputHandle, ParamHandle } from "../components/Handle";
+import { OutputHandle, ParamHandle } from "../Handle";
 import { useConstantSourceOffset } from "@/hooks/useConstantSource";
 
 export function ConstantSourceNode({ id }: { id: string }) {

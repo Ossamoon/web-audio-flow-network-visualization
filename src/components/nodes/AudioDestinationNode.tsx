@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 import { Volume2, VolumeX } from "lucide-react";
 
-import { InputHandle } from "../components/Handle";
+import { InputHandle } from "../Handle";
 import { Toggle } from "@/shadcn/app/ui/toggle";
-import { useAudioContextState } from "../hooks/useAudioContext";
+import { useAudioContextState } from "../../hooks/useAudioContext";
 
 export function AudioDestinationNode() {
   return (

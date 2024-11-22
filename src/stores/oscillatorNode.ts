@@ -1,7 +1,7 @@
 import context from "./audioContext";
 import { audioNodeStore } from "./audioNode";
 import { graphNodeStore } from "./graph";
-import { createStore, createParamControlStore } from "./utils";
+import { createStore, createParamStore } from "./utils";
 
 function getOscillatorNode(id: string) {
   return audioNodeStore.getNode(id) as OscillatorNode;
@@ -32,91 +32,52 @@ export const oscillatorNodeStore = {
 };
 
 const {
-  emitChange: emitFrequencyControlChange,
-  get: getOscillatorFrequencyControl,
-  subscribe: subscribeOscillatorFrequencyControl,
-} = createParamControlStore("frequency");
+  subscribeParamControl: subscribeFrequencyControl,
+  getParamControl: getFrequencyControl,
+  // setParamControl: setFreqencyControl,
+  subscribeParamValue: subscribeFrequency,
+  getParamValue: getFrequency,
+  setParamValue: setFrequency,
+} = createParamStore("frequency", getOscillatorNode);
 
 const {
-  emitChange: emitDetuneControlChange,
-  get: getOscillatorDetuneControl,
-  subscribe: subscribeOscillatorDetuneControl,
-} = createParamControlStore("detune");
+  subscribeParamControl: subscribeDetuneControl,
+  getParamControl: getDetuneControl,
+  // setParamControl: setDetuneControl,
+  subscribeParamValue: subscribeDetune,
+  getParamValue: getDetune,
+  setParamValue: setDetune,
+} = createParamStore("detune", getOscillatorNode);
 
-const {
-  emitChange: emitFrequencyChange,
-  subscribe: subscribeOscillatorFrequency,
-} = createStore();
+const { emitChange: emitTypeChange, subscribe: subscribeType } = createStore();
 
-const { emitChange: emitDetuneChange, subscribe: subscribeOscillatorDetune } =
-  createStore();
-
-const { emitChange: emitTypeChange, subscribe: subscribeOscillatorType } =
-  createStore();
-
-export function emitOscillatorParamsControlChange(
-  nodeId: string,
-  paramName: string
-) {
-  switch (paramName) {
-    case "frequency":
-      emitFrequencyControlChange(nodeId);
-      break;
-    case "detune":
-      emitDetuneControlChange(nodeId);
-      break;
-  }
-}
-
-function getOscillatorFrequency(id: string) {
-  return getOscillatorNode(id).frequency.value;
-}
-
-function setOscillatorFrequency(id: string, value: number) {
-  if (getOscillatorFrequencyControl(id)) {
-    getOscillatorNode(id).frequency.value = value;
-    emitFrequencyChange(id);
-  }
-}
-
-function getOscillatorDetune(id: string) {
-  return getOscillatorNode(id).detune.value;
-}
-
-function setOscillatorDetune(id: string, value: number) {
-  if (getOscillatorDetuneControl(id)) {
-    getOscillatorNode(id).detune.value = value;
-    emitDetuneChange(id);
-  }
-}
-
-function getOscillatorType(id: string) {
+function getType(id: string) {
   return getOscillatorNode(id).type;
 }
 
-function setOscillatorType(id: string, value: OscillatorType) {
+function setType(id: string, value: OscillatorType) {
   getOscillatorNode(id).type = value;
   emitTypeChange(id);
 }
 
 export const frequencyStore = {
-  getOscillatorFrequencyControl,
-  subscribeOscillatorFrequencyControl,
-  getOscillatorFrequency,
-  subscribeOscillatorFrequency,
-  setOscillatorFrequency,
+  getFrequencyControl,
+  subscribeFrequencyControl,
+  getFrequency,
+  subscribeFrequency,
+  setFrequency,
 };
 
 export const detuneStore = {
-  getOscillatorDetuneControl,
-  subscribeOscillatorDetuneControl,
-  getOscillatorDetune,
-  subscribeOscillatorDetune,
-  setOscillatorDetune,
+  getDetuneControl,
+  subscribeDetuneControl,
+  getDetune,
+  subscribeDetune,
+  setDetune,
 };
 
 export const typeStore = {
-  getOscillatorType,
-  subscribeOscillatorType,
-  setOscillatorType,
+  getType,
+  subscribeType,
+  setType,
 };
