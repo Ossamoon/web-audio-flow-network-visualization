@@ -4,6 +4,7 @@ import { graphNodeStore } from "../stores/graph";
 import { oscillatorNodeStore } from "../stores/oscillatorNode";
 import { constantSourceNodeStore } from "@/stores/constantSourceNode";
 import { gainNodeStore } from "../stores/gainNode";
+import { biquadFilterNodeStore } from "../stores/biquadFilterNode";
 import type { NodeType } from "../nodeTypes";
 
 const createNode = (type: NodeType) => {
@@ -14,6 +15,8 @@ const createNode = (type: NodeType) => {
       return constantSourceNodeStore.createConstantSourceNode();
     case "GainNode":
       return gainNodeStore.createGainNode();
+    case "BiquadFilterNode":
+      return biquadFilterNodeStore.createBiquadFilterNode();
     case "AudioDestinationNode":
       throw new Error("Cannot create AudioDestinationNode");
   }

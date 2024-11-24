@@ -25,6 +25,9 @@ export function AddNodeDropdown() {
         <DropdownMenuItem onClick={() => addNode("GainNode")}>
           GainNode
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => addNode("BiquadFilterNode")}>
+          BiquadFilterNode
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
