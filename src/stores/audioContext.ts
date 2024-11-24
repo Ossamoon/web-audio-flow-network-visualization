@@ -1,4 +1,5 @@
 const context = new AudioContext();
+context.suspend();
 
 export default context;
 

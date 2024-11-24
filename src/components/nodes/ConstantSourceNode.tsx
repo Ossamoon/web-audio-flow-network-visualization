@@ -1,9 +1,9 @@
-import { Input } from "@/shadcn/app/ui/input";
 import { Label } from "@/shadcn/app/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/app/ui/card";
 
 import { OutputHandle, ParamHandle } from "../Handle";
-import { useConstantSourceOffset } from "@/hooks/useConstantSource";
+import { AudioParamInput } from "../AudioParamInput";
+import { useConstantSourceOffset } from "../../hooks/useConstantSource";
 
 export function ConstantSourceNode({ id }: { id: string }) {
   return (
@@ -11,9 +11,11 @@ export function ConstantSourceNode({ id }: { id: string }) {
       <CardHeader>
         <CardTitle>Constant Source Node</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+
+      <CardContent className="w-72">
         <OffsetControl id={id} />
       </CardContent>
+
       <OutputHandle index={0} />
     </Card>
   );
@@ -25,18 +27,12 @@ function OffsetControl({ id }: { id: string }) {
     <div className="relative">
       <div className={!control ? "opacity-50" : ""}>
         <Label htmlFor="offset">Offset</Label>
-        <div className="flex items-center gap-2">
-          <Input
-            className={`w-40`}
-            id="offset"
-            name="offset"
-            type="number"
-            step="0.01"
-            value={offset}
-            onChange={(e) => setOffset(parseFloat(e.target.value))}
-            disabled={!control}
-          />
-        </div>
+        <AudioParamInput
+          name="offset"
+          value={offset}
+          setValue={setOffset}
+          disabled={!control}
+        />
       </div>
       <ParamHandle paramName="offset" />
     </div>
